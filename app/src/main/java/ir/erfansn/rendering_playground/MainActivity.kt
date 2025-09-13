@@ -25,6 +25,11 @@ import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.util.fastForEach
 import ir.erfansn.rendering_playground.ui.theme.RenderingPlaygroundTheme
 import kotlinx.coroutines.Dispatchers
@@ -59,6 +64,10 @@ class MainActivity : ComponentActivity() {
                             scaleX = zoom
                             scaleY = zoom
                             transformOrigin = TransformOrigin(0f, 0f)
+                        }
+                        .semantics {
+                            testTagsAsResourceId = true
+                            testTag = "canvas"
                         }
                 ) {
                     SamplePolylineElements.fastForEach {

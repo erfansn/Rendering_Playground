@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Rendering Playground"
 include(":app")
- 
+include(":benchmark")
