@@ -60,7 +60,7 @@ class MainActivity : ComponentActivity() {
                             testTag = "canvas"
                         }
                 ) {
-                    GroupedPolylineElements.fastForEach { it.Render() }
+                    SampleElements.fastForEach { it.Render() }
                 }
             }
         }
