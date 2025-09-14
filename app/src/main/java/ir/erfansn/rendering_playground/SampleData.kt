@@ -15,4 +15,8 @@ private val SamplePolylines = buildList {
     }
 }
 
-val SamplePolylineElements = SamplePolylines.map { PolylineElement(it) }
+val MergedPolylineElement = SamplePolylines.map { it.vertices }.reduce { acc, offsets ->
+    acc + offsets
+}.let {
+    PolylineElement(Polyline(it))
+}

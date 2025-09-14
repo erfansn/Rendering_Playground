@@ -70,9 +70,7 @@ class MainActivity : ComponentActivity() {
                             testTag = "canvas"
                         }
                 ) {
-                    SamplePolylineElements.fastForEach {
-                        it.Render()
-                    }
+                    MergedPolylineElement.Render()
                 }
             }
         }
