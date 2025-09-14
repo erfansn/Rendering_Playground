@@ -15,7 +15,7 @@ class PolylineElement(private val polyline: Polyline) {
             drawPoints(
                 points = polyline.vertices,
                 pointMode = PointMode.Polygon,
-                color = Color.White
+                color = polyline.color
             )
         }
     }

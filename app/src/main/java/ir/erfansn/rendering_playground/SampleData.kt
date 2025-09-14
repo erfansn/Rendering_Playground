@@ -1,8 +1,10 @@
 package ir.erfansn.rendering_playground
 
-import android.graphics.PointF
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import kotlin.random.Random
+
+private val SampleColors = listOf(Color.White, Color.Red, Color.Cyan)
 
 private val SamplePolylines = buildList {
     repeat(50_000) {
@@ -11,12 +13,15 @@ private val SamplePolylines = buildList {
             val randomN: () -> Float = { (Random.nextFloat() * 200_000) - 100_000f }
             Offset(randomN(), randomN())
         }
-        add(Polyline(vertices))
+        add(Polyline(vertices, SampleColors.random()))
     }
 }
 
-val MergedPolylineElement = SamplePolylines.map { it.vertices }.reduce { acc, offsets ->
-    acc + offsets
-}.let {
-    PolylineElement(Polyline(it))
+val GroupedPolylineElements = SamplePolylines.groupBy { it.color }.map { (color, polylines) ->
+    PolylineElement(
+        Polyline(
+            polylines.map { it.vertices }.reduce { acc, vertices -> acc + vertices },
+            color
+        )
+    )
 }
