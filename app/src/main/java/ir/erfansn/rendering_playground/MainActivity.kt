@@ -19,8 +19,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.drawscope.withTransform
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -38,6 +41,7 @@ class MainActivity : ComponentActivity() {
             RenderingPlaygroundTheme {
                 var zoom by remember { mutableFloatStateOf(1f) }
                 var offset by remember { mutableStateOf(Offset.Zero) }
+                var matrix by remember { mutableStateOf(android.graphics.Matrix()) }
                 Canvas(
                     Modifier
                         .fillMaxSize()
@@ -50,22 +54,22 @@ class MainActivity : ComponentActivity() {
                                 offset = (offset + centroid / oldScale) -
                                         (centroid / newScale + pan / oldScale)
                                 zoom = newScale
+
+                                matrix = android.graphics.Matrix().apply {
+                                    postTranslate(-offset.x, -offset.y)
+                                    postScale(zoom, zoom, 0f, 0f)
+                                }
                             }
                         }
                         .clipToBounds()
-                        .graphicsLayer {
-                            translationX = -offset.x * zoom
-                            translationY = -offset.y * zoom
-                            scaleX = zoom
-                            scaleY = zoom
-                            transformOrigin = TransformOrigin(0f, 0f)
-                        }
                         .semantics {
                             testTagsAsResourceId = true
                             testTag = "canvas"
                         }
                 ) {
-                    SampleElements.fastForEach { it.render(drawContext.canvas) }
+                    SampleElements.fastForEach {
+                        it.render(drawContext.canvas, matrix)
+                    }
                 }
             }
         }
