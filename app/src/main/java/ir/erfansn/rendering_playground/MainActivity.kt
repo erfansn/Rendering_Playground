@@ -1,5 +1,6 @@
 package ir.erfansn.rendering_playground
 
+import android.graphics.PointF
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -39,26 +41,30 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RenderingPlaygroundTheme {
-                var zoom by remember { mutableFloatStateOf(1f) }
-                var offset by remember { mutableStateOf(Offset.Zero) }
-                var matrix by remember { mutableStateOf(android.graphics.Matrix()) }
+                val matrix = remember { android.graphics.Matrix() }
+                var redrawSignal by remember { mutableIntStateOf(0) }
                 Canvas(
                     Modifier
                         .fillMaxSize()
                         .background(Color.Black)
                         .pointerInput(Unit) {
+                            var zoom = 1f
+                            val offset = PointF(0f, 0f)
                             detectTransformGestures { centroid, pan, gestureZoom, _ ->
                                 val oldScale = zoom
                                 val newScale = zoom * gestureZoom
 
-                                offset = (offset + centroid / oldScale) -
-                                        (centroid / newScale + pan / oldScale)
+                                offset.x = (offset.x + centroid.x / oldScale) -
+                                        (centroid.x / newScale + pan.x / oldScale)
+                                offset.y = (offset.y + centroid.y / oldScale) -
+                                        (centroid.y / newScale + pan.y / oldScale)
                                 zoom = newScale
 
-                                matrix = android.graphics.Matrix().apply {
-                                    postTranslate(-offset.x, -offset.y)
+                                matrix.apply {
+                                    setTranslate(-offset.x, -offset.y)
                                     postScale(zoom, zoom, 0f, 0f)
                                 }
+                                redrawSignal++
                             }
                         }
                         .clipToBounds()
@@ -67,6 +73,7 @@ class MainActivity : ComponentActivity() {
                             testTag = "canvas"
                         }
                 ) {
+                    redrawSignal
                     SampleElements.fastForEach {
                         it.render(drawContext.canvas, matrix)
                     }
