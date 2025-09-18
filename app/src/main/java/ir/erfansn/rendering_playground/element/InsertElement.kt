@@ -2,6 +2,7 @@ package ir.erfansn.rendering_playground.element
 
 import android.graphics.Matrix
 import androidx.compose.ui.graphics.Canvas
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.util.fastForEach
 import ir.erfansn.rendering_playground.entity.CircleEntity
 import ir.erfansn.rendering_playground.entity.InsertEntity
@@ -28,8 +29,11 @@ class InsertElement(entity: InsertEntity) : Element {
         canvas: Canvas,
         matrix: Matrix
     ) {
+        canvas.nativeCanvas.save()
+        canvas.nativeCanvas.concat(matrix)
         elements.fastForEach {
-            it.render(canvas, Matrix(innerMatrix).also { it.postConcat(Matrix(matrix)) })
+            it.render(canvas, innerMatrix)
         }
+        canvas.nativeCanvas.restore()
     }
 }
