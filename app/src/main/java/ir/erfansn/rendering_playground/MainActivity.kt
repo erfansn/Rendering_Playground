@@ -5,17 +5,24 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.collection.ObjectList
+import androidx.collection.mutableObjectListOf
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
@@ -32,6 +39,8 @@ class MainActivity : ComponentActivity() {
             RenderingPlaygroundTheme {
                 val matrix = remember { android.graphics.Matrix() }
                 var redrawSignal by remember { mutableIntStateOf(0) }
+                val path = remember { android.graphics.Path() }
+                val paint = remember { android.graphics.Paint() }
                 Canvas(
                     Modifier
                         .fillMaxSize()
@@ -63,8 +72,9 @@ class MainActivity : ComponentActivity() {
                         }
                 ) {
                     redrawSignal
-                    SampleElements.fastForEach {
-                        it.render(drawContext.canvas, matrix)
+
+                    SampleElements.fastForEach { element ->
+                        element.render(drawContext.canvas.nativeCanvas, path, paint, matrix)
                     }
                 }
             }

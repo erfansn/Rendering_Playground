@@ -1,23 +1,23 @@
 package ir.erfansn.rendering_playground.element
 
-import android.graphics.RectF
-import androidx.compose.ui.graphics.Canvas
-import androidx.compose.ui.graphics.nativeCanvas
-import ir.erfansn.rendering_playground.element.Element.Companion.paint
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.Path
+import androidx.compose.ui.graphics.toArgb
 import ir.erfansn.rendering_playground.entity.CircleEntity
 
-class CircleElement(private val circleEntity: CircleEntity) : Element {
+class CircleElement(private val entity: CircleEntity) : Element {
 
-    override fun render(canvas: Canvas, matrix: android.graphics.Matrix) {
-        canvas.nativeCanvas.save()
-        canvas.nativeCanvas.concat(matrix)
-        canvas.drawCircle(
-            paint = paint.apply {
-                color = circleEntity.color
-            },
-            radius = circleEntity.radius,
-            center = circleEntity.center
+    override val style: ElementStyle =
+        ElementStyle(entity.color.toArgb(), Paint.Style.FILL)
+
+    override fun structure(path: Path, matrix: Matrix) {
+        path.addCircle(
+            entity.center.x,
+            entity.center.y,
+            entity.radius,
+            Path.Direction.CW
         )
-        canvas.nativeCanvas.restore()
     }
+
 }

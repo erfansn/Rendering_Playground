@@ -1,23 +1,22 @@
 package ir.erfansn.rendering_playground.element
 
-import androidx.compose.ui.graphics.Canvas
-import androidx.compose.ui.graphics.PointMode
-import androidx.compose.ui.graphics.nativeCanvas
-import ir.erfansn.rendering_playground.element.Element.Companion.paint
+import android.graphics.Matrix
+import android.graphics.Paint
+import android.graphics.Path
+import androidx.compose.ui.graphics.toArgb
 import ir.erfansn.rendering_playground.entity.PolylineEntity
 
-class PolylineElement(private val polyline: PolylineEntity) : Element {
+class PolylineElement(private val entity: PolylineEntity) : Element {
 
-    override fun render(canvas: Canvas, matrix: android.graphics.Matrix) {
-        canvas.nativeCanvas.save()
-        canvas.nativeCanvas.concat(matrix)
-        canvas.drawPoints(
-            pointMode = PointMode.Polygon,
-            points = polyline.vertices,
-            paint = paint.apply {
-                color = polyline.color
-            }
-        )
-        canvas.nativeCanvas.restore()
+    override val style: ElementStyle =
+        ElementStyle(entity.color.toArgb(), Paint.Style.STROKE)
+
+    override fun structure(path: Path, matrix: Matrix) {
+        val firstVertex = entity.vertices[0]
+        path.moveTo(firstVertex.x, firstVertex.y)
+        for ((x, y) in entity.vertices.drop(1)) {
+            path.lineTo(x, y)
+        }
     }
+
 }
