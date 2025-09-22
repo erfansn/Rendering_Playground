@@ -25,7 +25,9 @@ interface Element {
         }
 
         canvas.withMatrix(matrix) {
-            canvas.drawPath(path, paint)
+            if (!canvas.quickReject(path)) {
+                canvas.drawPath(path, paint)
+            }
         }
     }
 }
