@@ -5,10 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
-import android.graphics.RectF
-import androidx.compose.ui.graphics.PathMeasure
-import androidx.core.graphics.transform
-import androidx.core.graphics.withMatrix
 
 interface Element {
     val style: ElementStyle
@@ -24,10 +20,8 @@ interface Element {
             this.style = this@Element.style.paintingStyle
         }
 
-        canvas.withMatrix(matrix) {
-            if (!canvas.quickReject(path)) {
-                canvas.drawPath(path, paint)
-            }
+        if (!canvas.quickReject(path)) {
+            canvas.drawPath(path, paint)
         }
     }
 }

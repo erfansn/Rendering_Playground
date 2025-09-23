@@ -30,6 +30,7 @@ class PointElement(private val entity: PointEntity) : Element {
         paint: Paint,
         matrix: Matrix
     ) {
+        canvas.restore()
         val path = path.apply {
             rewind()
             structure(this, matrix)
@@ -40,5 +41,7 @@ class PointElement(private val entity: PointEntity) : Element {
         }
 
         canvas.drawPath(path, paint)
+        canvas.save()
+        canvas.concat(matrix)
     }
 }

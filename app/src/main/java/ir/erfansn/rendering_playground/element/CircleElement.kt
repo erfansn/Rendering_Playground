@@ -19,5 +19,4 @@ class CircleElement(private val entity: CircleEntity) : Element {
             Path.Direction.CW
         )
     }
-
 }

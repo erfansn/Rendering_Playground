@@ -18,5 +18,4 @@ class PolylineElement(private val entity: PolylineEntity) : Element {
             path.lineTo(x, y)
         }
     }
-
 }

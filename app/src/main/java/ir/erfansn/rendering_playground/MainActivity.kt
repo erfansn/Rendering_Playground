@@ -28,6 +28,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.util.fastForEach
+import androidx.core.graphics.withMatrix
 import ir.erfansn.rendering_playground.ui.theme.RenderingPlaygroundTheme
 
 class MainActivity : ComponentActivity() {
@@ -73,8 +74,10 @@ class MainActivity : ComponentActivity() {
                 ) {
                     redrawSignal
 
-                    SampleElements.fastForEach { element ->
-                        element.render(drawContext.canvas.nativeCanvas, path, paint, matrix)
+                    drawContext.canvas.nativeCanvas.withMatrix(matrix) {
+                        SampleElements.fastForEach { element ->
+                            element.render(this, path, paint, matrix)
+                        }
                     }
                 }
             }
