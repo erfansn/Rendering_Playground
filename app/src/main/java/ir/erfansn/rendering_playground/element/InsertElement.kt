@@ -4,6 +4,7 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.RectF
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
@@ -15,13 +16,11 @@ import ir.erfansn.rendering_playground.entity.InsertEntity
 import ir.erfansn.rendering_playground.entity.PointEntity
 import ir.erfansn.rendering_playground.entity.PolylineEntity
 
-class InsertElement(entity: InsertEntity) : Element {
+class InsertElement(private val entity: InsertEntity) : Element {
 
-    override val style: ElementStyle
-        get() = error("not supported")
-
-    override fun structure(path: Path, matrix: Matrix) {
-        error("not supported")
+    private val innerMatrix = Matrix().apply {
+        setTranslate(entity.insersionPoint.x, entity.insersionPoint.y)
+        postScale(entity.scale, entity.scale)
     }
 
     private val elements = entity.entities.map {
@@ -33,9 +32,21 @@ class InsertElement(entity: InsertEntity) : Element {
         }
     }
 
-    private val innerMatrix = Matrix().apply {
-        setTranslate(entity.insersionPoint.x, entity.insersionPoint.y)
-        postScale(entity.scale, entity.scale)
+    override val bounds: RectF = run {
+        val firstBounds = elements[0].bounds
+        for (element in elements.drop(1)) {
+            firstBounds.union(element.bounds)
+        }
+        innerMatrix.mapRect(firstBounds)
+
+        firstBounds
+    }
+
+    override val style: ElementStyle
+        get() = error("not supported")
+
+    override fun structure(path: Path, matrix: Matrix) {
+        error("not supported")
     }
 
     @RequiresApi(Build.VERSION_CODES.R)

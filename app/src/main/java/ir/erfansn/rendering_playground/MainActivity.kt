@@ -3,6 +3,7 @@ package ir.erfansn.rendering_playground
 import android.graphics.Canvas
 import android.graphics.PointF
 import android.graphics.Rect
+import android.graphics.RectF
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -97,17 +98,34 @@ class MainActivity : ComponentActivity() {
                             },
                     ) {
                         onSurface { surface, width, height ->
+                            var viewBounds = RectF(
+                                0.0f, 0.0f,
+                                width.toFloat(), height.toFloat()
+                            )
+
+                            surface.onChanged { width, height ->
+                                viewBounds = RectF(
+                                    0.0f, 0.0f,
+                                    width.toFloat(), height.toFloat()
+                                )
+                            }
+
                             surface.lockHardwareCanvas().apply {
                                 drawColor(Color.Black.toArgb())
                                 surface.unlockCanvasAndPost(this)
                             }
 
+                            val elementBounds = RectF()
                             snapshotFlow { redrawSignal }.collectLatest {
                                 surface.lockHardwareCanvas().apply {
                                     drawColor(Color.Black.toArgb())
                                     withMatrix(matrix) {
                                         SampleElements.fastForEach { element ->
-                                            element.render(this, path, paint, matrix)
+                                            elementBounds.set(element.bounds)
+                                            matrix.mapRect(elementBounds)
+                                            if (!(elementBounds.width() < 4 || elementBounds.height() < 4) && RectF.intersects(viewBounds, elementBounds)) {
+                                                element.render(this, path, paint, matrix)
+                                            }
                                         }
                                     }
                                     surface.unlockCanvasAndPost(this)

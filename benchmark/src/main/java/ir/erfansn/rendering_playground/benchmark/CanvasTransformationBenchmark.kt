@@ -1,5 +1,6 @@
 package ir.erfansn.rendering_playground.benchmark
 
+import androidx.benchmark.macro.CompilationMode
 import androidx.benchmark.macro.FrameTimingMetric
 import androidx.benchmark.macro.StartupMode
 import androidx.benchmark.macro.StartupTimingMetric
@@ -49,6 +50,11 @@ class CanvasTransformationBenchmark {
     timeToInitialDisplayMs   min 427.7,   median 574.0,   max 725.8
     frameDurationCpuMs       P50  164.2,   P90  222.8,   P95  237.8,   P99  249.9
     frameOverrunMs           P50  301.4,   P90  328.7,   P95  330.5,   P99  332.0
+
+    frameCount               min   1.0,   median   1.0,   max   1.0
+    timeToInitialDisplayMs   min 582.7,   median 601.4,   max 797.9
+    frameDurationCpuMs       P50  122.5,   P90  144.4,   P95  146.1,   P99  147.4
+    frameOverrunMs           P50  124.7,   P90  184.5,   P95  191.5,   P99  197.1
      */
     @Test
     fun transform() = benchmarkRule.measureRepeated(

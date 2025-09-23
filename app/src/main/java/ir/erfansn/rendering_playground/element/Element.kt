@@ -5,8 +5,10 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.RectF
 
 interface Element {
+    val bounds: RectF
     val style: ElementStyle
     fun structure(path: Path, matrix: Matrix)
     @SuppressLint("NewApi")
