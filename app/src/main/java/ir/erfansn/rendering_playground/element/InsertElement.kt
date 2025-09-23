@@ -40,7 +40,7 @@ class InsertElement(entity: InsertEntity) : Element {
 
     @RequiresApi(Build.VERSION_CODES.R)
     override fun render(canvas: Canvas, path: Path, paint: Paint, matrix: Matrix) {
-        canvas.withMatrix(matrix) {
+        canvas.withMatrix(innerMatrix) {
             elements.fastForEach {
                 it.render(this, path, paint, innerMatrix)
             }
