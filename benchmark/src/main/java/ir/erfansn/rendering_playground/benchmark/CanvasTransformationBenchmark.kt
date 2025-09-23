@@ -39,6 +39,11 @@ class CanvasTransformationBenchmark {
     frameDurationCpuMs       P50    528.1,   P90  1,011.3,   P95  1,019.1,   P99  1,025.4
     frameOverrunMs           P50    531.1,   P90  1,027.9,   P95  1,034.5,   P99  1,039.7
     Traces: Iteration 0 1 2 3 4
+
+    frameCount               min     1.0,   median     2.0,   max     5.0
+    timeToInitialDisplayMs   min   947.3,   median   982.6,   max 1,308.8
+    frameDurationCpuMs       P50    373.7,   P90    751.9,   P95    774.0,   P99    781.8
+    frameOverrunMs           P50    405.4,   P90    742.0,   P95    763.6,   P99    777.3
      */
     @Test
     fun transform() = benchmarkRule.measureRepeated(

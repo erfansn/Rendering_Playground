@@ -10,16 +10,17 @@ import ir.erfansn.rendering_playground.entity.PointEntity
 
 class PointElement(private val entity: PointEntity) : Element {
 
-    override val style: ElementStyle =
+    override val style: ElementStyle get() =
         ElementStyle(entity.color.toArgb(), Paint.Style.FILL)
 
     override fun structure(path: Path, matrix: Matrix) {
         val position = floatArrayOf(entity.position.x, entity.position.y)
         matrix.mapPoints(position)
-        path.addCircle(
-            position[0],
-            position[1],
-            10f,
+        path.addRect(
+            position[0] - 5,
+            position[1] - 5,
+            position[0] + 5,
+            position[1] + 5,
             Path.Direction.CW
         )
     }
@@ -31,16 +32,7 @@ class PointElement(private val entity: PointEntity) : Element {
         matrix: Matrix
     ) {
         canvas.restore()
-        val path = path.apply {
-            rewind()
-            structure(this, matrix)
-        }
-        val paint = paint.apply {
-            this.color = this@PointElement.style.color
-            this.style = this@PointElement.style.paintingStyle
-        }
-
-        canvas.drawPath(path, paint)
+        super.render(canvas, path, paint, matrix)
         canvas.save()
         canvas.concat(matrix)
     }
