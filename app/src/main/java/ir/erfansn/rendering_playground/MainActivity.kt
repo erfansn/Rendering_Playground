@@ -5,6 +5,7 @@ import android.graphics.PointF
 import android.graphics.Rect
 import android.graphics.RectF
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -42,6 +43,7 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.util.fastForEach
 import androidx.core.graphics.withMatrix
 import androidx.core.os.ExecutorCompat
+import ir.erfansn.rendering_playground.element.PointElement
 import ir.erfansn.rendering_playground.ui.theme.RenderingPlaygroundTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asCoroutineDispatcher
@@ -123,7 +125,7 @@ class MainActivity : ComponentActivity() {
                                         SampleElements.fastForEach { element ->
                                             elementBounds.set(element.bounds)
                                             matrix.mapRect(elementBounds)
-                                            if (!(elementBounds.width() < 4 || elementBounds.height() < 4) && RectF.intersects(viewBounds, elementBounds)) {
+                                            if (element is PointElement || ((elementBounds.width() > 4 || elementBounds.height() > 4) && RectF.intersects(viewBounds, elementBounds))) {
                                                 element.render(this, path, paint, matrix)
                                             }
                                         }
