@@ -13,7 +13,7 @@ import ir.erfansn.rendering_playground.entity.PointEntity
 import ir.erfansn.rendering_playground.entity.PolylineEntity
 import kotlin.random.Random
 
-private val randomN: () -> Float = { (Random.nextFloat() * 200_000) - 100_000f }
+private val randomN: () -> Float = { (Random.nextFloat() * Random.nextInt(0, 200_000)) - Random.nextInt(0, 100_000) }
 
 private val SampleColors = listOf(Color.White, Color.Red, Color.Cyan)
 
