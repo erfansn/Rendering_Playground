@@ -19,7 +19,7 @@ class CircleElement(private val entity: CircleEntity) : Element {
     override val style: ElementStyle =
         ElementStyle(entity.color.toArgb(), Paint.Style.FILL)
 
-    override fun structure(path: Path, matrix: Matrix) {
+    override fun structure(path: Path, matrix: Matrix, zoom: Float) {
         path.addCircle(
             entity.center.x,
             entity.center.y,

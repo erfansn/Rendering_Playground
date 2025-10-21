@@ -7,8 +7,6 @@ import android.graphics.Path
 import android.graphics.RectF
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.util.fastForEach
 import androidx.core.graphics.withMatrix
 import ir.erfansn.rendering_playground.entity.CircleEntity
@@ -45,15 +43,15 @@ class InsertElement(private val entity: InsertEntity) : Element {
     override val style: ElementStyle
         get() = error("not supported")
 
-    override fun structure(path: Path, matrix: Matrix) {
+    override fun structure(path: Path, matrix: Matrix, zoom: Float) {
         error("not supported")
     }
 
     @RequiresApi(Build.VERSION_CODES.R)
-    override fun render(canvas: Canvas, path: Path, paint: Paint, matrix: Matrix) {
+    override fun render(canvas: Canvas, path: Path, paint: Paint, matrix: Matrix, zoom: Float) {
         canvas.withMatrix(innerMatrix) {
             elements.fastForEach {
-                it.render(this, path, paint, innerMatrix)
+                it.render(this, path, paint, innerMatrix, zoom)
             }
         }
     }

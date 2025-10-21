@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.RectF
 import androidx.compose.ui.graphics.toArgb
-import androidx.core.graphics.withMatrix
 import ir.erfansn.rendering_playground.entity.PointEntity
 
 class PointElement(private val entity: PointEntity) : Element {
@@ -23,7 +22,7 @@ class PointElement(private val entity: PointEntity) : Element {
 
     private val mappedPosition = floatArrayOf(entity.position.x, entity.position.y)
 
-    override fun structure(path: Path, matrix: Matrix) {
+    override fun structure(path: Path, matrix: Matrix, zoom: Float) {
         mappedPosition[0] = entity.position.x; mappedPosition[1] = entity.position.y
         matrix.mapPoints(mappedPosition)
         path.addRect(
@@ -39,10 +38,11 @@ class PointElement(private val entity: PointEntity) : Element {
         canvas: Canvas,
         path: Path,
         paint: Paint,
-        matrix: Matrix
+        matrix: Matrix,
+        zoom: Float
     ) {
         canvas.restore()
-        super.render(canvas, path, paint, matrix)
+        super.render(canvas, path, paint, matrix, zoom)
         canvas.save()
         canvas.concat(matrix)
     }

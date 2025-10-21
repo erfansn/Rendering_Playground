@@ -10,12 +10,12 @@ import android.graphics.RectF
 interface Element {
     val bounds: RectF
     val style: ElementStyle
-    fun structure(path: Path, matrix: Matrix)
+    fun structure(path: Path, matrix: Matrix, zoom: Float)
     @SuppressLint("NewApi")
-    fun render(canvas: Canvas, path: Path, paint: Paint, matrix: Matrix) {
+    fun render(canvas: Canvas, path: Path, paint: Paint, matrix: Matrix, zoom: Float) {
         val path = path.apply {
             rewind()
-            structure(this, matrix)
+            structure(this, matrix, zoom)
         }
         val paint = paint.apply {
             this.color = this@Element.style.color
