@@ -7,10 +7,10 @@ import android.graphics.RectF.intersects
 import android.os.Build
 import androidx.compose.ui.util.fastForEach
 import androidx.core.graphics.withMatrix
+import androidx.core.graphics.withTranslation
 import ir.erfansn.rendering_playground.element.ElementStyle
 import ir.erfansn.rendering_playground.element.InsertElement
 import ir.erfansn.rendering_playground.element.PointElement
-import ir.erfansn.rendering_playground.element.PolylineElement
 
 class ElementRenderer {
 
@@ -38,13 +38,30 @@ class ElementRenderer {
                             intersects(viewBounds, elementBounds))
                 ) {
                     if (element is PointElement || element is InsertElement) {
-                        element.render(
-                            this,
-                            path2,
-                            paint,
-                            matrix,
-                            zoom
-                        )
+                        if (element is PointElement) {
+                            canvas.restore()
+                            val position = floatArrayOf(element.position.x, element.position.y)
+                            matrix.mapPoints(position)
+                            canvas.withTranslation(position[0] - element.position.x, position[1] - element.position.y) {
+                                element.render(
+                                    this,
+                                    path2,
+                                    paint,
+                                    matrix,
+                                    zoom
+                                )
+                            }
+                            canvas.save()
+                            canvas.concat(matrix)
+                        } else {
+                            element.render(
+                                this,
+                                path2,
+                                paint,
+                                matrix,
+                                zoom
+                            )
+                        }
                     } else if (element.style == lastElementStyle) {
                         element.structure(path, matrix, zoom)
                     } else {

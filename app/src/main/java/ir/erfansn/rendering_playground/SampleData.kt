@@ -18,7 +18,7 @@ private val randomN: () -> Float = { (Random.nextFloat() * Random.nextInt(0, 200
 private val SampleColors = listOf(Color.White, Color.Red, Color.Cyan)
 
 private val SamplePolylines = buildList {
-    repeat(50_000) {
+    repeat(20_000) {
         when (Random.nextInt(4)) {
             0 -> {
                 val verticesCount = Random.nextInt(2, 4)
